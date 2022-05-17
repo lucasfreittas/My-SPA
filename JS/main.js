@@ -1,29 +1,15 @@
-const links = {
-    "/": "/home.html",
-    "/about": "/about.html",
-    "/contact": "/contact.html",
-    "/404": "/404.html",
-}
+import { Routes } from "./links.js"
 
-function getLink(){
-    window.event.preventDefault()
+const router = new Routes()
+router.add('/index.html', '/home.html')
+router.add('/', '/home.html')
+router.add('/about', '/about.html')
+router.add('/contact', '/contact.html')
+router.add(404, '/404.html')
 
-    window.history.pushState({}, "", event.target.href )
 
-    changeLink()
-}
 
-function changeLink(){
-    const { pathname } = window.location
-    const routes = links[pathname]
+router.changeLink()
 
-    fetch(routes)
-    .then(page => page.text())
-    .then(html => {
-        document.querySelector('#app').innerHTML = html
-    })
-}
-
-changeLink()
-
-window.getLink = () => getLink()
+window.onpopstate = () => router.changeLink()
+window.getLink = () => router.getLink()
